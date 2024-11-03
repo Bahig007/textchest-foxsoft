@@ -1,6 +1,8 @@
 <?php
 
 namespace App\Http\Controllers;
+
+use App\Events\Message;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Http\Request;
 
@@ -89,6 +91,53 @@ class smsContoller extends Controller
              return response()->json(['error' => 'Failed to fetch data'], $response->status()); // Return error if failed
          }
 
+
+    
+         public function handleWebhook(Request $request)
+         {
+             // Extract token and data from the request
+             $token = $request->input('token');
+             $data = $request->input('data');
+     
+             // Validate the token
+             if ($token !== 'YOUR_TOKEN_ON_WEBHOOKS') {
+                 return response()->json(['error' => 'Invalid token'], 403);
+             }
+     
+             // Extract the message from the data
+             $message = $data['message'] ?? null;
+     
+             // Define the keyword map
+             $keywordMap = [
+                 'Yahoo' => 'Yahoo',
+                 'Your X confirmation' => 'X',
+                 'Facebook' => 'Facebook'
+             ];
+     
+             // Initialize a variable to hold the matched company name
+             $matchedCompany = null;
+     
+             // Check if the message contains any of the keywords
+             foreach ($keywordMap as $keyword => $company) {
+                 if (strpos($message, $keyword) !== false) {
+                     $matchedCompany = $company;
+                    //  \Log::info("Message contains $matchedCompany: " . $message);
+                     break; // Exit the loop after the first match
+                 }
+             }
+     
+             // Optional: Handle cases where no company matched
+            //  if ($matchedCompany === null) {
+            //      \Log::info("No matching company found in message: " . $message);
+            //  }
+     
+             // Respond to the webhook
+             event(new Message($matchedCompany, $data['recipient'], $message));
+             return response()->json(['message' => 'Webhook received' , 'recipient' => $data['recipient'],'company' =>  $matchedCompany]);
+         }
+     
+
+   
     //  public function index()
     //  {
     //      $smsMessages = SMS::all();

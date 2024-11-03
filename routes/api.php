@@ -25,3 +25,4 @@ use Illuminate\Support\Facades\Route;
 Route::get('/SmS/{number}', [smsContoller::class, 'getSms']);
 
 Route::get('/myNumber', [smsContoller::class, 'getNumber']);
+Route::post('/webhook', [smsContoller::class, 'handleWebhook']);
