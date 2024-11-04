@@ -9,6 +9,10 @@ return [
      */
     'dashboard' => [
         'port' => env('LARAVEL_WEBSOCKETS_PORT', 6001),
+        'enabled' => true,
+        'authorization' => function ($request) {
+            return true; // Allow access to the WebSocket dashboard
+        },
     ],
 
     /*

@@ -17,7 +17,7 @@ Broadcast::channel('App.Models.User.{id}', function ($user, $id) {
     return (int) $user->id === (int) $id;
 });
 
-Broadcast::channel('CompanyUpdated.{companyName}.{phoneNumber}', function ($user, $companyName, $phoneNumber) {
+Broadcast::channel('CompanyUpdated', function ($user, $companyName, $phoneNumber) {
     // You can add your logic to authorize the user here
     // For example, you might want to check if the user belongs to the company
     return true; // Allow access for now (adjust as necessary)

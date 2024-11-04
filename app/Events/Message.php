@@ -5,10 +5,11 @@ namespace App\Events;
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
+use Illuminate\Contracts\Broadcasting\ShouldBroadcastNow;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-class Message implements ShouldBroadcast
+class Message implements ShouldBroadcastNow
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
@@ -38,7 +39,7 @@ class Message implements ShouldBroadcast
     public function broadcastOn(): array
     {
         return [
-            new Channel("CompanyUpdated.{$this->companyName}.{$this->phoneNumber}"), // Dynamic channel name
+            new Channel("CompanyUpdated"), // Dynamic channel name
         ];
     }
 
