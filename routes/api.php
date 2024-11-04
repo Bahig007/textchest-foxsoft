@@ -22,7 +22,7 @@ use Illuminate\Support\Facades\Route;
 // Route::apiResource('sms', smsContoller::class);
 
 
-Route::get('/SmS/{number}', [smsContoller::class, 'getSms']);
+Route::get('/sms/{number}', [smsContoller::class, 'getSms']);
 
 Route::get('/myNumber', [smsContoller::class, 'getNumber']);
 Route::post('/webhook', [smsContoller::class, 'handleWebhook']);

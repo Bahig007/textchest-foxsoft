@@ -14,8 +14,8 @@ class smsContoller extends Controller
  
       public function getNumber()
          {
-
             $rawKey = env('TEXT_CHEST_kEY');
+          
             // Decode the token (e.g., base64 decoding)
             $encodedKey = base64_encode($rawKey);
          
@@ -29,19 +29,23 @@ class smsContoller extends Controller
 
      
              if ($response->successful()) {
-                 return $response->json();
+                return $response->json();
+               // return response()->json(['data' => $response,'token' => $rawKey], );
              }
      
              return response()->json(['error' => 'Failed to fetch data'], $response->status());
          }
 
 
-
          public function getSms($number)
          {
-             $rawKey = env('TEXT_CHEST_KEY'); // Correct the environment variable name
+           // $rawKey = env('TEXT_CHEST_kEY');
+            $rawKey = env('TEXT_CHEST_kEY');
+             // Correct the environment variable name
              $encodedKey = base64_encode($rawKey);
-         
+             if (!$rawKey) {
+                return response()->json(['error' => 'Environment variable TEXT_CHEST_KEY not set'], 500);
+            }
              $response = Http::withOptions([
                  'verify' => false, // Temporarily disable SSL verification (not recommended for production)
              ])->withHeaders([
@@ -88,8 +92,9 @@ class smsContoller extends Controller
                  return response()->json($classifiedMessages); // Return the array of objects
              }
          
-             return response()->json(['error' => 'Failed to fetch data'], $response->status()); // Return error if failed
+             return response()->json(['error' => 'Failed to fetch data' , 'token' => $rawKey], $response->status()); // Return error if failed
          }
+    
 
 
     
@@ -137,6 +142,7 @@ class smsContoller extends Controller
          }
      
 
+        
    
     //  public function index()
     //  {
